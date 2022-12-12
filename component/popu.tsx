@@ -42,7 +42,7 @@ export default function Population(props: props) {
       "population/composition/perYear?prefCode=";
     const apikey = process.env.NEXT_PUBLIC_API_KEY;
     assemblePopu(root_url, apikey).then((res) => setPopus(res));
-  }, []);
+  }, [props.selPrefs]);
 
   return (
     <div>
