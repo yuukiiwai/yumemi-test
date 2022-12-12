@@ -6,5 +6,6 @@
 |:-:|:-:|
 |コンポーネント|/component/|
 |公開定数|/constant/|
+|型|/types/|
 ## CSS管理
 Next.jsに従い、styles下のoo.module.cssをインポート
