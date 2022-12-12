@@ -3,40 +3,43 @@ import { handleResErr } from "../constant/funcs";
 import { pref } from "../types/data";
 
 interface props {
-  selPrefs : pref[]
-  setPrefs : (prefs:pref[])=>void
+  selPrefs: pref[];
+  setPrefs: (prefs: pref[]) => void;
 }
 
-export default function Pref(props:props){
+export default function Pref(props: props) {
   /* 都道府県state */
   const [prefs, setPrefs] = useState<pref[]>([]);
-  const getPrefs = (json: any) => { // fetchで返ってくる型に無駄な情報があるので
+  const getPrefs = (json: any) => {
+    // fetchで返ってくる型に無駄な情報があるので
     return json.result;
   };
 
-  const updateSelect = (flag:boolean,nextPref:pref) => {
+  const updateSelect = (flag: boolean, nextPref: pref) => {
     /* select要素の更新 */
     let nowSelect = [...props.selPrefs]; //お手軽ディープコピー
-    if(flag){
+    if (flag) {
       /* もし追加なら、stateの特性を避けつつ追加 */
       nowSelect.push(nextPref);
       props.setPrefs(nowSelect);
-    }else{
+    } else {
       /* 削除はfilterを使う。同じくstateの特性を避けてset */
-      nowSelect = nowSelect.filter((item)=>{
-        return item.prefCode !== nextPref.prefCode
+      nowSelect = nowSelect.filter((item) => {
+        return item.prefCode !== nextPref.prefCode;
       });
       props.setPrefs(nowSelect);
     }
-  }
+  };
 
   /* 都道府県を取得する */
   useEffect(() => {
-    if ( // 余計な?やasを発生させないため
+    if (
+      // 余計な?やasを発生させないため
       process.env.NEXT_PUBLIC_API_ORIGIN === undefined ||
       process.env.NEXT_PUBLIC_API_VER_POINT === undefined ||
       process.env.NEXT_PUBLIC_API_KEY === undefined
-    ) { // ダメな訳ないがダメだったら動かせないので。
+    ) {
+      // ダメな訳ないがダメだったら動かせないので。
       return;
     }
 
@@ -68,15 +71,15 @@ export default function Pref(props:props){
           <span key={key}>
             <input
               type={"checkbox"}
-              id={"pref"+pref.prefCode}// idを被らせないように
+              id={"pref" + pref.prefCode} // idを被らせないように
               name={pref.prefName}
-              onChange={(event: ChangeEvent<HTMLInputElement>)=>{
+              onChange={(event: ChangeEvent<HTMLInputElement>) => {
                 /* onchangeでselectした都道府県を更新 */
                 let checked = event.target.checked;
-                updateSelect(checked,pref);
+                updateSelect(checked, pref);
               }}
             />
-            <label htmlFor={"pref"+pref.prefCode}>
+            <label htmlFor={"pref" + pref.prefCode}>
               {pref.prefName}
             </label>
           </span>
@@ -84,4 +87,4 @@ export default function Pref(props:props){
       })}
     </div>
   );
-};
+}
