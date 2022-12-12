@@ -1,3 +1,31 @@
 {
-  "extends": "next/core-web-vitals"
+    "extends": [
+        "next/core-web-vitals",
+        "plugin:import/warnings",
+        "prettier"
+    ],
+    "rules": {
+        "semi": [
+            "error",
+            "always"
+        ],
+        "semi-spacing": [
+            "error",
+            {
+                "after": true,
+                "before": false
+            }
+        ],
+        "semi-style": [
+            "error",
+            "last"
+        ],
+        "comma-spacing": [
+            "error",
+            {
+                "before": false,
+                "after": true
+            }
+        ]
+    }
 }
