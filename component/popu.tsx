@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { handleResErr } from "../constant/funcs";
 import { population, pref } from "../types/data";
 import ChartView from "./chartview";
 
