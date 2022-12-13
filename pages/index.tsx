@@ -5,6 +5,8 @@ import Pref from "../component/pref";
 import { useEffect, useState } from "react";
 import Population from "../component/popu";
 import { pref } from "../types/data";
+import ChartView from "../component/chartview";
+import SampleChartView from "../component/usagesample/recharts";
 
 export default function Home() {
   const [selPrefs, setPrefs] = useState<pref[]>([]);

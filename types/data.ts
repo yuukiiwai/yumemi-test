@@ -9,6 +9,6 @@ export type region = {
 };
 
 export type population = {
-  prefName: string;
+  pref: pref;
   data: { year: number; value: number }[];
 };
