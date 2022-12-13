@@ -2,7 +2,7 @@ import styles from "../styles/Home.module.css";
 
 import Head from "next/head";
 import Pref from "../component/pref";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Population from "../component/popu";
 import { pref } from "../types/data";
 
