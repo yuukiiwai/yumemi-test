@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { handleResErr } from "../constant/funcs";
 import { population, pref } from "../types/data";
+import ChartView from "./chartview";
 
 interface props {
   selPrefs: pref[];
@@ -20,7 +20,7 @@ export default function Population(props: props) {
       });
       const json = await res.json();
       let _popu: population = {
-        prefName: props.selPrefs[i].prefName,
+        pref: props.selPrefs[i],
         data: json.result.data[0].data,
       };
       newpopus.push(_popu);
@@ -46,7 +46,7 @@ export default function Population(props: props) {
 
   return (
     <div>
-      <p>{JSON.stringify(populations)}</p>
+      <ChartView populations={populations} />
     </div>
   );
 }

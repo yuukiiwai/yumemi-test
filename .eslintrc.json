@@ -4,6 +4,7 @@
     "plugin:import/warnings",
     "prettier"
   ],
+  "plugins": ["unused-imports"],
   "rules": {
     "semi": ["error", "always"],
     "semi-spacing": [
@@ -20,6 +21,7 @@
         "before": false,
         "after": true
       }
-    ]
+    ],
+    "unused-imports/no-unused-imports": "error"
   }
 }
