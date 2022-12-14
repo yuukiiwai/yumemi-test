@@ -2,6 +2,8 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { handleResErr } from "../constant/funcs";
 import { pref } from "../types/data";
 
+import styles from "../styles/Pref.module.css";
+
 interface props {
   selPrefs: pref[];
   setPrefs: (prefs: pref[]) => void;
@@ -66,25 +68,27 @@ export default function Pref(props: props) {
   return (
     <div>
       <p>都道府県</p>
-      {prefs.map((pref, key) => {
-        return (
-          <span key={key}>
-            <input
-              type={"checkbox"}
-              id={"pref" + pref.prefCode} // idを被らせないように
-              name={pref.prefName}
-              onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                /* onchangeでselectした都道府県を更新 */
-                let checked = event.target.checked;
-                updateSelect(checked, pref);
-              }}
-            />
-            <label htmlFor={"pref" + pref.prefCode}>
-              {pref.prefName}
-            </label>
-          </span>
-        );
-      })}
+      <div className={styles.prefview}>
+        {prefs.map((pref, key) => {
+          return (
+            <div key={key} className={styles.iitem}>
+              <input
+                type={"checkbox"}
+                id={"pref" + pref.prefCode} // idを被らせないように
+                name={pref.prefName}
+                onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                  /* onchangeでselectした都道府県を更新 */
+                  let checked = event.target.checked;
+                  updateSelect(checked, pref);
+                }}
+              />
+              <label htmlFor={"pref" + pref.prefCode}>
+                {pref.prefName}
+              </label>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
