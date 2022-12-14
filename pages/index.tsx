@@ -7,7 +7,7 @@ import Population from "../component/popu";
 import { pref } from "../types/data";
 
 export default function Home() {
-  const [selPrefs, setPrefs] = useState<pref[]>([]);
+  const [selPrefs, setPrefs] = useState<pref[]>([]); // 選択されている県データ
   return (
     <div className={styles.container}>
       <Head>

@@ -16,7 +16,9 @@ interface props {
   populations: population[];
 }
 
+/* rechartsの使い方はPackage_Use.mdへ */
 export default function ChartView(props: props) {
+  /* グラフだけを管理する */
   return (
     <div className={styles.graph}>
       <ResponsiveContainer width={"100%"} height={"100%"}>
