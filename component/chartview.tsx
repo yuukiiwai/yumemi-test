@@ -1,4 +1,4 @@
-import styles from "../styles/graph.module.css";
+import styles from "../styles/Graph.module.css";
 import {
   LineChart,
   Line,
@@ -28,8 +28,10 @@ export default function ChartView(props: props) {
             dataKey="year"
             type="category"
             allowDuplicatedCategory={false}
+            unit={"年"}
           />
-          <YAxis dataKey="value" />
+          <YAxis dataKey="value" width={86} unit={"人"} />
+          {/* 86で東京の桁数に間に合う */}
           <Tooltip />
           <Legend />
           {props.populations.map((popu) => (

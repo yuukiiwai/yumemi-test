@@ -1,0 +1,7 @@
+.graph{
+    /* 見やすい大きさ */
+    height: 70vh;
+    width: 90vw;
+    margin:0 auto;
+    /* 中央に寄せたい */
+}
