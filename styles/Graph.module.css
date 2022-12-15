@@ -1,0 +1,24 @@
+.graph{
+    /* 見やすい大きさ */
+    height: 70vh;
+    width: 90%;
+
+    /* 中央に寄せたい */
+    margin:0 auto;
+
+    font-size: 12pt;
+}
+
+@media screen and (max-width: 940px) {
+    .graph{
+        width: 95%;
+        font-size: 10pt;
+    }
+}
+
+@media screen and (max-width: 720px) {
+    .container{
+        width: 100%;
+        font-size: 8pt;
+    }
+}

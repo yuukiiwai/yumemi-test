@@ -1,0 +1,14 @@
+.iitem >label{
+  margin-left: 4px;
+  /* 4pxで見やすい */
+  /* それ以上でもいいけどなるべく狭くしたいから4pxで */
+}
+
+.prefview{
+  display: grid;
+  gap : 5px;
+  /* 5pxくらいが見やすかった */
+  grid-template-columns: repeat(auto-fit,minmax(65pt,1fr)); 
+  /* 都道府県は65pt以内で収まる。 */
+  /* フレキシブルにする */
+}
