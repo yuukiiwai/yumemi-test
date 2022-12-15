@@ -1,4 +1,6 @@
 .container{
+    height: auto;
+    width: auto;
     margin: 10px 100px 0;
 }
 
