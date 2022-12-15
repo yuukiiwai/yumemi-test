@@ -19,18 +19,18 @@ interface props {
 
 /* rechartsの使い方はPackage_Use.mdへ */
 export default function ChartView(props: props) {
-  const [width,height] = useWindowSize();
-  const [yW,setYW] = useState<number>(0);
-  useEffect(()=>{
+  const [width, height] = useWindowSize();
+  const [yW, setYW] = useState<number>(0);
+  useEffect(() => {
     // 実験結果の閾値を使う
-    if(width < 720){
+    if (width < 720) {
       setYW(73);
-    }else if(width < 940){
+    } else if (width < 940) {
       setYW(75);
-    }else{
+    } else {
       setYW(86);
     }
-  },[width])
+  }, [width]);
   /* グラフだけを管理する */
   return (
     <div className={styles.graph}>
@@ -70,10 +70,10 @@ const useWindowSize = (): number[] => {
       setSize([window.innerWidth, window.innerHeight]);
     };
 
-    window.addEventListener('resize', updateSize);
+    window.addEventListener("resize", updateSize);
     updateSize();
 
-    return () => window.removeEventListener('resize', updateSize);
+    return () => window.removeEventListener("resize", updateSize);
   }, []);
   return size;
 };
