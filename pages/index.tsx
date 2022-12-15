@@ -15,6 +15,9 @@ export default function Home() {
         <meta name="description" content="各都道府県の人口推移" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <div className={styles.header}>
+        <h1>各都道府県の人口推移</h1>
+      </div>
       <Pref
         selPrefs={selPrefs}
         setPrefs={(prefs) => {
