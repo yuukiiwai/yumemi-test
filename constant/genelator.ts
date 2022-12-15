@@ -3,6 +3,7 @@ const get150 = () => {
 };
 
 export const getRandomColor = () => {
+  /* RGBを作る */
   const red = get150();
   const green = get150();
   const blue = get150();
