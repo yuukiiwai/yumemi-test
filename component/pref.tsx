@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, Fragment, useEffect, useState } from "react";
 import { handleResErr } from "../constant/funcs";
 import { pref } from "../types/data";
 
@@ -66,8 +66,8 @@ export default function Pref(props: props) {
   }, []);
 
   return (
-    <div>
-      <p>都道府県</p>
+    <Fragment>
+      <h2>都道府県</h2>
       <div className={styles.prefview}>
         {prefs.map((pref, key) => {
           return (
@@ -89,6 +89,6 @@ export default function Pref(props: props) {
           );
         })}
       </div>
-    </div>
+    </Fragment>
   );
 }
