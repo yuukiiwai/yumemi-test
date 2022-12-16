@@ -36,7 +36,7 @@ export default function ChartView(props: props) {
 
   /* グラフだけを管理する */
   return (
-    <div className={styles.graph}>
+    <section className={styles.graph}>
       <ResponsiveContainer width={"100%"} height={"100%"}>
         <LineChart width={500} height={500}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -61,6 +61,6 @@ export default function ChartView(props: props) {
           ))}
         </LineChart>
       </ResponsiveContainer>
-    </div>
+    </section>
   );
 }

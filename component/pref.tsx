@@ -46,7 +46,7 @@ export default function Pref(props: props) {
   }, []);
 
   return (
-    <Fragment>
+    <section>
       <h2>都道府県</h2>
       <div className={styles.prefview}>
         {prefs.map((pref, key) => {
@@ -69,6 +69,6 @@ export default function Pref(props: props) {
           );
         })}
       </div>
-    </Fragment>
+    </section>
   );
 }

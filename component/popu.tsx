@@ -33,8 +33,6 @@ export default function Population(props: props) {
   }, [props.selPrefs]);
 
   return (
-    <div>
-      <ChartView populations={populations} />
-    </div>
+    <ChartView populations={populations} />
   );
 }
