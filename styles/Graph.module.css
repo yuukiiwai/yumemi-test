@@ -4,7 +4,7 @@
     width: 90%;
 
     /* 中央に寄せたい */
-    margin:0 auto;
+    margin:30px auto 0;
 
     font-size: 12pt;
 }
