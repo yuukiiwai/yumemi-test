@@ -1,8 +1,12 @@
 import { ChangeEvent, Fragment, useEffect, useState } from "react";
-import { handleResErr } from "../constant/funcs";
 import { pref } from "../types/data";
 
 import styles from "../styles/Pref.module.css";
+import {
+  getPrefs,
+  getPrefsData,
+  updateSelect,
+} from "../compfuncs/pref";
 
 interface props {
   selPrefs: pref[];
@@ -12,26 +16,6 @@ interface props {
 export default function Pref(props: props) {
   /* 都道府県state */
   const [prefs, setPrefs] = useState<pref[]>([]);
-  const getPrefs = (json: any) => {
-    // fetchで返ってくる型に無駄な情報があるので
-    return json.result;
-  };
-
-  const updateSelect = (flag: boolean, nextPref: pref) => {
-    /* select要素の更新 */
-    let nowSelect = [...props.selPrefs]; //お手軽ディープコピー
-    if (flag) {
-      /* もし追加なら、stateの特性を避けつつ追加 */
-      nowSelect.push(nextPref);
-      props.setPrefs(nowSelect);
-    } else {
-      /* 削除はfilterを使う。同じくstateの特性を避けてset */
-      nowSelect = nowSelect.filter((item) => {
-        return item.prefCode !== nextPref.prefCode;
-      });
-      props.setPrefs(nowSelect);
-    }
-  };
 
   /* 都道府県を取得する */
   useEffect(() => {
@@ -51,18 +35,9 @@ export default function Pref(props: props) {
       "prefectures";
     const apikey = process.env.NEXT_PUBLIC_API_KEY;
 
-    /* 通信 */
-    fetch(url, {
-      headers: {
-        "X-API-KEY": apikey,
-      },
-    })
-      .then(handleResErr)
-      .then((res) => res.json())
-      .then((json) => {
-        setPrefs(getPrefs(json));
-      })
-      .catch((err) => console.log(err));
+    getPrefs(url, apikey)
+      .then((data) => getPrefsData(data))
+      .then((prefsdata) => setPrefs(prefsdata));
   }, []);
 
   return (
@@ -79,7 +54,7 @@ export default function Pref(props: props) {
                 onChange={(event: ChangeEvent<HTMLInputElement>) => {
                   /* onchangeでselectした都道府県を更新 */
                   let checked = event.target.checked;
-                  updateSelect(checked, pref);
+                  updateSelect(checked, prefs, pref, props.setPrefs);
                 }}
               />
               <label htmlFor={"pref" + pref.prefCode}>
