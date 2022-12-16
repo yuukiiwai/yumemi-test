@@ -59,7 +59,7 @@ export default function Pref(props: props) {
                 onChange={(event: ChangeEvent<HTMLInputElement>) => {
                   /* onchangeでselectした都道府県を更新 */
                   let checked = event.target.checked;
-                  updateSelect(checked, prefs, pref, props.setPrefs);
+                  updateSelect(checked, props.selPrefs, pref, props.setPrefs);
                 }}
               />
               <label htmlFor={"pref" + pref.prefCode}>

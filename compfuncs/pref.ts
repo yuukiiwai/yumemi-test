@@ -7,9 +7,9 @@ export const getPrefsData = (json: any) => {
 };
 
 export const updateSelect = (
-  flag: boolean,
-  prefs: pref[],
-  nextPref: pref,
+  flag: boolean, // checkしたor外した
+  prefs: pref[], // 現状
+  nextPref: pref, // 今から入れたいor消したい
   setPrefs: (prefs: pref[]) => void,
 ) => {
   /* select要素の更新 */
