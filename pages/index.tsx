@@ -17,13 +17,13 @@ export default function Home() {
       </Head>
       <main>
         <h1 className={styles.header}>各都道府県の人口推移</h1>
-      <Pref
-        selPrefs={selPrefs}
-        setPrefs={(prefs) => {
-          setPrefs(prefs);
-        }}
-      />
-      <Population selPrefs={selPrefs} />
+        <Pref
+          selPrefs={selPrefs}
+          setPrefs={(prefs) => {
+            setPrefs(prefs);
+          }}
+        />
+        <Population selPrefs={selPrefs} />
       </main>
     </div>
   );
