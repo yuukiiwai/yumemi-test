@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import { population } from "../types/data";
 import { prefColors } from "../constant/data";
-import { useEffect,  useState } from "react";
+import { useEffect, useState } from "react";
 import { useWindowSize } from "../constant/funcs";
 
 interface props {

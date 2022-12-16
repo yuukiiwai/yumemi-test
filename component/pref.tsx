@@ -1,4 +1,9 @@
-import { ChangeEvent, Fragment, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  Fragment,
+  useEffect,
+  useState,
+} from "react";
 import { pref } from "../types/data";
 
 import styles from "../styles/Pref.module.css";
