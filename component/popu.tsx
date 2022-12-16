@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { population, pref } from "../types/data";
 import ChartView from "./chartview";
+import { assemblePopu } from "../compfuncs/popu";
 
 interface props {
   selPrefs: pref[];
@@ -9,26 +10,6 @@ interface props {
 export default function Population(props: props) {
   /* 取得したデータを使ってグラフを呼び出す */
   const [populations, setPopus] = useState<population[]>([]);
-
-  const assemblePopu = async (root_url: string, apikey: string) => {
-    /* 人口を通信でgetする - ループもさせる - */
-    let newpopus: population[] = [];
-
-    for (let i = 0; i < props.selPrefs.length; i++) {
-      const res = await fetch(root_url + props.selPrefs[i].prefCode, {
-        headers: {
-          "X-API-KEY": apikey,
-        },
-      });
-      const json = await res.json();
-      let _popu: population = {
-        pref: props.selPrefs[i],
-        data: json.result.data[0].data,
-      };
-      newpopus.push(_popu);
-    }
-    return newpopus;
-  };
 
   useEffect(() => {
     if (
@@ -45,12 +26,13 @@ export default function Population(props: props) {
       "population/composition/perYear?prefCode=";
     const apikey = process.env.NEXT_PUBLIC_API_KEY;
 
-    assemblePopu(root_url, apikey).then((res) => setPopus(res));
+    /* 情報取得 */
+    assemblePopu(root_url, apikey, props.selPrefs).then((res) =>
+      setPopus(res),
+    );
   }, [props.selPrefs]);
 
   return (
-    <div>
-      <ChartView populations={populations} />
-    </div>
+    <ChartView populations={populations} />
   );
 }
