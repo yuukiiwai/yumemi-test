@@ -11,7 +11,8 @@ import {
 } from "recharts";
 import { population } from "../types/data";
 import { prefColors } from "../constant/data";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useWindowSize } from "../constant/funcs";
 
 interface props {
   populations: population[];
@@ -21,6 +22,7 @@ interface props {
 export default function ChartView(props: props) {
   const [width, height] = useWindowSize();
   const [yW, setYW] = useState<number>(0);
+
   useEffect(() => {
     // 実験結果の閾値を使う
     if (width < 720) {
@@ -31,9 +33,10 @@ export default function ChartView(props: props) {
       setYW(86);
     }
   }, [width]);
+
   /* グラフだけを管理する */
   return (
-    <div className={styles.graph}>
+    <section className={styles.graph}>
       <ResponsiveContainer width={"100%"} height={"100%"}>
         <LineChart width={500} height={500}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -45,7 +48,6 @@ export default function ChartView(props: props) {
           />
           <YAxis dataKey="value" width={yW} unit={"人"} />
           {/* widthを書かないと数字が外に行って隠れる */}
-          {/* 86で東京の桁数に間に合う */}
           <Tooltip />
           <Legend />
           {props.populations.map((popu) => (
@@ -59,21 +61,6 @@ export default function ChartView(props: props) {
           ))}
         </LineChart>
       </ResponsiveContainer>
-    </div>
+    </section>
   );
 }
-
-const useWindowSize = (): number[] => {
-  const [size, setSize] = useState([0, 0]);
-  useLayoutEffect(() => {
-    const updateSize = (): void => {
-      setSize([window.innerWidth, window.innerHeight]);
-    };
-
-    window.addEventListener("resize", updateSize);
-    updateSize();
-
-    return () => window.removeEventListener("resize", updateSize);
-  }, []);
-  return size;
-};
