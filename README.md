@@ -9,5 +9,6 @@
 |コンポーネントの機能部分|/commpfuncs/|
 |公開定数|/constant/|
 |型|/types/|
+|ドキュメント|/docs/|
 ## CSS管理
 Next.jsに従い、styles下のoo.module.cssをインポート
