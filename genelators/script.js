@@ -1,23 +1,27 @@
+var rgb = require("hsv-rgb");
+
 /* think.mdにロジック記載 */
-function genColor() {
-  let list = [];
-  for (let i = 255; i > 60; i -= Math.round(255 / 4) - 1) {
-    list.push([i, 0, 0]);
-    list.push([0, i, 0]);
-    list.push([0, 0, i]);
-    list.push([i, i, 0]);
-    list.push([i, 0, i]);
-    list.push([0, i, i]);
-    for (let j = 140; j > 60; j -= Math.round(255 / 4) - 1) {
-      list.push([i, j, j]);
-      list.push([j, i, j]);
-      list.push([j, j, i]);
-      for (let k = 60; k > 60; k -= Math.round(255 / 4) - 1) {
-        list.push([i, j, k]);
-        list.push([j, i, k]);
-        list.push([j, k, i]);
+function genColorHSV() {
+  const originH = [
+    0, 30, 120, 150, 180, 210, 240, 270, 300, 330,
+  ];
+  const originS = [100, 75, 50];
+  const originV = [100, 75, 40];
+  let hsvlist = [];
+  for (let v = 0; v < originV.length; v++) {
+    for (let s = 0; s < originS.length; s++) {
+      for (let h = 0; h < originH.length; h++) {
+        hsvlist.push([originH[h], originS[s], originV[v]]);
       }
     }
+  }
+  return hsvlist;
+}
+
+function getRGBs(hsvlist) {
+  let list = [];
+  for (let i = 0; i < hsvlist.length; i++) {
+    list.push(rgb(hsvlist[i][0], hsvlist[i][1], hsvlist[i][2]));
   }
   return list;
 }
@@ -31,8 +35,9 @@ function toStringColor(list) {
   return strlist;
 }
 
-const colorAll = genColor();
-const colorStr = toStringColor(colorAll);
+const colorAllhsv = genColorHSV();
+const colorAllrgb = getRGBs(colorAllhsv);
+const colorStr = toStringColor(colorAllrgb);
 
 /* 出力 */
 var fs = require("fs");
@@ -46,4 +51,4 @@ fs.writeFile(
 );
 
 /* 終了時のメッセージ */
-console.log(colorAll.length);
+console.log(colorAllhsv.length);
