@@ -29,13 +29,13 @@ export default function Pref(props: props) {
               checked={props.selPrefs.indexOf(pref) != -1} // checkがここで管理しきれなくなるから
               onChange={(event: ChangeEvent<HTMLInputElement>) => {
                 let checked = event.target.checked;
-                /* 選択県状態を更新 */
-                updateSelect(
+                /* 新しい選択県状態を取得 */
+                let newSelPref = updateSelect(
                   checked,
                   props.selPrefs,
                   pref,
-                  props.setPrefs,
                 );
+                props.setPrefs(newSelPref); //更新
 
                 /* 新しい選択地域状態を取得 */
                 let newSelReg = getRegionStatebyPref(
