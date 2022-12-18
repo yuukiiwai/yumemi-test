@@ -12,20 +12,19 @@ export const updateSelect = (
   flag: boolean, // checkしたor外した
   prefs: pref[], // 現状
   nextPref: pref, // 今から入れたいor消したい
-  setPrefs: (prefs: pref[]) => void,
 ) => {
   /* select要素の更新 */
-  let nowSelect = [...prefs]; //お手軽ディープコピー
+
   if (flag) {
     /* もし追加なら、stateの特性を避けつつ追加 */
-    nowSelect.push(nextPref);
-    setPrefs(nowSelect);
+    return [...prefs, nextPref];
   } else {
+    let nowSelect = [...prefs]; //お手軽ディープコピー
     /* 削除はfilterを使う。同じくstateの特性を避けてset */
     nowSelect = nowSelect.filter((item) => {
       return item.prefCode !== nextPref.prefCode;
     });
-    setPrefs(nowSelect);
+    return nowSelect;
   }
 };
 
@@ -34,12 +33,10 @@ export const updateSelectbyRegi = (
   flag: boolean, // checkしたor外した
   prefs: pref[], // 現状
   nextPrefs: pref[], // 今から入れたいor消したい
-  setPrefs: (prefs: pref[]) => void,
 ) => {
   /* regionの選択で全部上書きする */
 
   let nowSelect = [...prefs]; // お手軽ディープコピー
-
   if (flag) {
     /* 追加なら */
     /* 新しく追加する県をリスト化 */
@@ -47,16 +44,15 @@ export const updateSelectbyRegi = (
       // 追加する分は地方の中の
       return nowSelect.indexOf(item) == -1; // 現在セレクトされていないitemである
     });
-    /* 最新状態に遷移 */
-    nowSelect.push(...newPushList);
-    setPrefs(nowSelect);
+    /* 最新状態はnowとnewの連結 */
+    return [...nowSelect, ...newPushList];
   } else {
     /* 削除なら */
     nowSelect = nowSelect.filter((item) => {
       // 現在セレクトされている中に
       return nextPrefs.indexOf(item) == -1; // nextPrefsに含まれなければtrue
     });
-    setPrefs(nowSelect);
+    return nowSelect;
   }
 };
 
@@ -107,17 +103,15 @@ export const updateRegion = (
   checked: boolean,
   newkey: number,
   selRegionKey: number[],
-  setSelRegionKey: (keys: number[]) => void,
 ) => {
-  let nowRegionKeys = [...selRegionKey];
   if (checked) {
-    nowRegionKeys.push(newkey);
-    setSelRegionKey(nowRegionKeys);
+    return [...selRegionKey, newkey];
   } else {
+    let nowRegionKeys = [...selRegionKey];
     nowRegionKeys = nowRegionKeys.filter((item) => {
       return item !== newkey;
     });
-    setSelRegionKey(nowRegionKeys);
+    return nowRegionKeys;
   }
 };
 

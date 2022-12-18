@@ -57,15 +57,21 @@ export default function Region(props: props) {
               checked={selRegionKey.indexOf(rkey) != -1}
               onChange={(event: ChangeEvent<HTMLInputElement>) => {
                 let checked = event.target.checked;
-                updateSelectbyRegi(
+                /* 新しい県選択情報を取得 */
+                let newPrefs = updateSelectbyRegi(
                   checked,
                   props.selPrefs,
                   region.prefs,
-                  props.setPrefs,
                 );
-                updateRegion(checked, rkey, selRegionKey, (keys) => {
-                  setSelRegionKey(keys);
-                });
+                props.setPrefs(newPrefs); // 更新
+
+                /* 新しい地域情報を取得 */
+                let newRegions = updateRegion(
+                  checked,
+                  rkey,
+                  selRegionKey,
+                );
+                setSelRegionKey(newRegions); //更新
               }}
             />
             <label htmlFor={"region" + region.regionName}>
