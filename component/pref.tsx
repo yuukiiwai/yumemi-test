@@ -1,8 +1,9 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import { pref } from "../types/data";
+import { pref, region } from "../types/data";
 
 import styles from "../styles/Pref.module.css";
 import {
+  adjustWithRegion,
   getPrefs,
   getPrefsData,
   updateSelect,
@@ -16,6 +17,7 @@ interface props {
 export default function Pref(props: props) {
   /* 都道府県state */
   const [prefs, setPrefs] = useState<pref[]>([]);
+  const [japan, setJap] = useState<region[]>([]);
 
   /* 都道府県を取得する */
   useEffect(() => {
@@ -37,38 +39,47 @@ export default function Pref(props: props) {
 
     getPrefs(url, apikey)
       .then((data) => getPrefsData(data))
-      .then((prefsdata) => setPrefs(prefsdata));
+      .then((prefsdata) => {
+        setPrefs(prefsdata);
+        setJap(adjustWithRegion(prefsdata));
+      });
   }, []);
 
   return (
     <section>
       <h2>都道府県</h2>
-      <div className={styles.prefview}>
-        {prefs.map((pref, key) => {
-          return (
-            <div key={key} className={styles.iitem}>
-              <input
-                type={"checkbox"}
-                id={"pref" + pref.prefCode} // idを被らせないように
-                name={pref.prefName}
-                onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                  /* onchangeでselectした都道府県を更新 */
-                  let checked = event.target.checked;
-                  updateSelect(
-                    checked,
-                    props.selPrefs,
-                    pref,
-                    props.setPrefs,
-                  );
-                }}
-              />
-              <label htmlFor={"pref" + pref.prefCode}>
-                {pref.prefName}
-              </label>
-            </div>
-          );
-        })}
-      </div>
+      {japan.map((region, rkey) => {
+        return (
+          <div key={rkey}>
+            <p>{region.regionName}</p>
+            {region.prefs.map((pref, pkey) => {
+              return (
+                <div key={pkey}>
+                  <input
+                    type="checkbox"
+                    id={"pref" + pref.prefCode}
+                    name={pref.prefName}
+                    onChange={(
+                      event: ChangeEvent<HTMLInputElement>,
+                    ) => {
+                      let checked = event.target.checked;
+                      updateSelect(
+                        checked,
+                        props.selPrefs,
+                        pref,
+                        props.setPrefs,
+                      );
+                    }}
+                  />
+                  <label htmlFor={"pref" + pref.prefCode}>
+                    {pref.prefName}
+                  </label>
+                </div>
+              );
+            })}
+          </div>
+        );
+      })}
     </section>
   );
 }

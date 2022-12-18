@@ -1,5 +1,6 @@
+import { region_pref } from "../constant/data";
 import { handleResErr } from "../constant/funcs";
-import { pref } from "../types/data";
+import { pref, region } from "../types/data";
 
 export const getPrefsData = (json: any) => {
   // fetchで返ってくる型に無駄な情報があるので
@@ -37,4 +38,33 @@ export const getPrefs = async (url: string, apikey: string) => {
     .then(handleResErr)
     .then((res) => res.json());
   return data;
+};
+
+export const adjustWithRegion = (originPrefs: pref[]) => {
+  let japan: region[] = []; // 最終的なデータ
+
+  for (let i = 0; i < region_pref.length; i++) {
+    /* 地域データを作成 */
+    let _regionName = region_pref[i].region;
+    let _prefs: pref[] = [];
+
+    for (let j = 0; j < originPrefs.length; j++) {
+      /* 地域に都道府県を属させる */
+      if (
+        region_pref[i].prefs.indexOf(originPrefs[j].prefName) != -1
+      ) {
+        /* 属していれば、追加 */
+        _prefs.push(originPrefs[j]);
+      }
+    }
+
+    const _region: region = {
+      regionName: _regionName,
+      prefs: _prefs,
+    };
+
+    japan.push(_region);
+  }
+
+  return japan;
 };
