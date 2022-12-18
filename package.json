@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json}'",
-    "gendata":"node genelators/script.js"
+    "gendata": "node genelators/script.js"
   },
   "dependencies": {
     "@types/node": "18.11.13",
