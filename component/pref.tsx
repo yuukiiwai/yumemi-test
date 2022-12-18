@@ -6,7 +6,9 @@ import {
   adjustWithRegion,
   getPrefs,
   getPrefsData,
+  updateRegion,
   updateSelect,
+  updateSelectbyRegi,
 } from "../compfuncs/pref";
 
 interface props {
@@ -18,6 +20,7 @@ export default function Pref(props: props) {
   /* 都道府県state */
   const [prefs, setPrefs] = useState<pref[]>([]);
   const [japan, setJap] = useState<region[]>([]);
+  const [selRegionKey, setSelRegionKey] = useState<number[]>([]); // チェック中の地域をストック
 
   /* 都道府県を取得する */
   useEffect(() => {
@@ -40,7 +43,6 @@ export default function Pref(props: props) {
     getPrefs(url, apikey)
       .then((data) => getPrefsData(data))
       .then((prefsdata) => {
-        setPrefs(prefsdata);
         setJap(adjustWithRegion(prefsdata));
       });
   }, []);
@@ -50,8 +52,27 @@ export default function Pref(props: props) {
       <h2>都道府県</h2>
       {japan.map((region, rkey) => {
         return (
-          <div key={rkey}>
-            <p>{region.regionName}</p>
+          <section key={rkey}>
+            <input
+              type="checkbox"
+              id={"region" + region.regionName}
+              checked={selRegionKey.indexOf(rkey) != -1}
+              onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                let checked = event.target.checked;
+                updateSelectbyRegi(
+                  checked,
+                  props.selPrefs,
+                  region.prefs,
+                  props.setPrefs,
+                );
+                updateRegion(checked, rkey, selRegionKey, (keys) => {
+                  setSelRegionKey(keys);
+                });
+              }}
+            />
+            <label htmlFor={"region" + region.regionName}>
+              {region.regionName}
+            </label>
             {region.prefs.map((pref, pkey) => {
               return (
                 <div key={pkey}>
@@ -59,6 +80,7 @@ export default function Pref(props: props) {
                     type="checkbox"
                     id={"pref" + pref.prefCode}
                     name={pref.prefName}
+                    checked={props.selPrefs.indexOf(pref) != -1} // checkがここで管理しきれなくなるから
                     onChange={(
                       event: ChangeEvent<HTMLInputElement>,
                     ) => {
@@ -69,6 +91,11 @@ export default function Pref(props: props) {
                         pref,
                         props.setPrefs,
                       );
+                      if(checked === false){
+                        setSelRegionKey([...selRegionKey].filter((item)=>{
+                          return item !== rkey;
+                        }))
+                      }
                     }}
                   />
                   <label htmlFor={"pref" + pref.prefCode}>
@@ -77,7 +104,7 @@ export default function Pref(props: props) {
                 </div>
               );
             })}
-          </div>
+          </section>
         );
       })}
     </section>

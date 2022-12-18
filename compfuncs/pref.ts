@@ -28,6 +28,36 @@ export const updateSelect = (
   }
 };
 
+export const updateSelectbyRegi = (
+  flag: boolean, // checkしたor外した
+  prefs: pref[], // 現状
+  nextPrefs: pref[], // 今から入れたいor消したい
+  setPrefs: (prefs: pref[]) => void,
+) => {
+  /* regionの選択で全部上書きする */
+
+  let nowSelect = [...prefs]; // お手軽ディープコピー
+
+  if (flag) {
+    /* 追加なら */
+    /* 新しく追加する県をリスト化 */
+    let newPushList: pref[] = nextPrefs.filter((item) => {
+      // 追加する分は地方の中の
+      return nowSelect.indexOf(item) == -1; // 現在セレクトされていないitemである
+    });
+    /* 最新状態に遷移 */
+    nowSelect.push(...newPushList);
+    setPrefs(nowSelect);
+  } else {
+    /* 削除なら */
+    nowSelect = nowSelect.filter((item) => {
+      // 現在セレクトされている中に
+      return nextPrefs.indexOf(item) == -1; // nextPrefsに含まれなければtrue
+    });
+    setPrefs(nowSelect);
+  }
+};
+
 export const getPrefs = async (url: string, apikey: string) => {
   /* 通信 */
   const data = await fetch(url, {
@@ -67,4 +97,22 @@ export const adjustWithRegion = (originPrefs: pref[]) => {
   }
 
   return japan;
+};
+
+export const updateRegion = (
+  checked: boolean,
+  newkey: number,
+  selRegionKey: number[],
+  setSelRegionKey: (keys: number[]) => void,
+) => {
+  let nowRegionKeys = [...selRegionKey];
+  if (checked) {
+    nowRegionKeys.push(newkey);
+    setSelRegionKey(nowRegionKeys);
+  } else {
+    nowRegionKeys = nowRegionKeys.filter((item) => {
+      return item !== newkey;
+    });
+    setSelRegionKey(nowRegionKeys);
+  }
 };
