@@ -56,7 +56,7 @@ export default function ChartView(props: props) {
               data={popu.data}
               name={popu.pref.prefName}
               key={popu.pref.prefCode}
-              stroke={prefColors[popu.pref.prefCode]}
+              stroke={prefColors[popu.pref.prefCode - 1]}
             />
           ))}
         </LineChart>
