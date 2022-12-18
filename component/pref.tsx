@@ -1,74 +1,60 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import { pref } from "../types/data";
+import { pref, region } from "../types/data";
 
 import styles from "../styles/Pref.module.css";
+import { ChangeEvent } from "react";
 import {
-  getPrefs,
-  getPrefsData,
+  getRegionStatebyPref,
   updateSelect,
 } from "../compfuncs/pref";
 
 interface props {
+  parentReg: region;
+  parentRkey: number;
   selPrefs: pref[];
   setPrefs: (prefs: pref[]) => void;
+  selRegions: number[];
+  setRegions: (rkey: number[]) => void;
 }
 
 export default function Pref(props: props) {
-  /* 都道府県state */
-  const [prefs, setPrefs] = useState<pref[]>([]);
-
-  /* 都道府県を取得する */
-  useEffect(() => {
-    if (
-      // 余計な?やasを発生させないため
-      process.env.NEXT_PUBLIC_API_ORIGIN === undefined ||
-      process.env.NEXT_PUBLIC_API_VER_POINT === undefined ||
-      process.env.NEXT_PUBLIC_API_KEY === undefined
-    ) {
-      // ダメな訳ないがダメだったら動かせないので。
-      return;
-    }
-
-    const url =
-      process.env.NEXT_PUBLIC_API_ORIGIN +
-      process.env.NEXT_PUBLIC_API_VER_POINT +
-      "prefectures";
-    const apikey = process.env.NEXT_PUBLIC_API_KEY;
-
-    getPrefs(url, apikey)
-      .then((data) => getPrefsData(data))
-      .then((prefsdata) => setPrefs(prefsdata));
-  }, []);
-
   return (
-    <section>
-      <h2>都道府県</h2>
-      <div className={styles.prefview}>
-        {prefs.map((pref, key) => {
-          return (
-            <div key={key} className={styles.iitem}>
-              <input
-                type={"checkbox"}
-                id={"pref" + pref.prefCode} // idを被らせないように
-                name={pref.prefName}
-                onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                  /* onchangeでselectした都道府県を更新 */
-                  let checked = event.target.checked;
-                  updateSelect(
-                    checked,
-                    props.selPrefs,
-                    pref,
-                    props.setPrefs,
-                  );
-                }}
-              />
-              <label htmlFor={"pref" + pref.prefCode}>
-                {pref.prefName}
-              </label>
-            </div>
-          );
-        })}
-      </div>
-    </section>
+    <div className={styles.prefview}>
+      {props.parentReg.prefs.map((pref, pkey) => {
+        return (
+          <div key={pkey} className={styles.iitem}>
+            <input
+              type="checkbox"
+              id={"pref" + pref.prefCode}
+              name={pref.prefName}
+              checked={props.selPrefs.indexOf(pref) != -1} // checkがここで管理しきれなくなるから
+              onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                let checked = event.target.checked;
+                /* 選択県状態を更新 */
+                updateSelect(
+                  checked,
+                  props.selPrefs,
+                  pref,
+                  props.setPrefs,
+                );
+
+                /* 新しい選択地域状態を取得 */
+                let newSelReg = getRegionStatebyPref(
+                  checked,
+                  props.selPrefs,
+                  props.selRegions,
+                  props.parentRkey,
+                  pref,
+                  props.parentReg,
+                );
+                props.setRegions(newSelReg); //更新
+              }}
+            />
+            <label htmlFor={"pref" + pref.prefCode}>
+              {pref.prefName}
+            </label>
+          </div>
+        );
+      })}
+    </div>
   );
 }
