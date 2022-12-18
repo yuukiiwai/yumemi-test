@@ -73,9 +73,10 @@ export default function Pref(props: props) {
             <label htmlFor={"region" + region.regionName}>
               {region.regionName}
             </label>
+            <div className={styles.prefview}>
             {region.prefs.map((pref, pkey) => {
               return (
-                <div key={pkey}>
+                <div key={pkey} className={styles.iitem}>
                   <input
                     type="checkbox"
                     id={"pref" + pref.prefCode}
@@ -115,6 +116,7 @@ export default function Pref(props: props) {
                 </div>
               );
             })}
+            </div>
           </section>
         );
       })}
