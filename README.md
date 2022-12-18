@@ -10,5 +10,6 @@
 |公開定数|/constant/|
 |型|/types/|
 |ドキュメント|/docs/|
+|静的データの生成|/genelators/script.js|
 ## CSS管理
 Next.jsに従い、styles下のoo.module.cssをインポート
