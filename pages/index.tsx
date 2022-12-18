@@ -1,10 +1,10 @@
 import styles from "../styles/Home.module.css";
 
 import Head from "next/head";
-import Pref from "../component/pref";
 import { useState } from "react";
 import Population from "../component/popu";
 import { pref } from "../types/data";
+import Region from "../component/region";
 
 export default function Home() {
   const [selPrefs, setPrefs] = useState<pref[]>([]); // 選択されている県データ
@@ -17,7 +17,7 @@ export default function Home() {
       </Head>
       <main>
         <h1 className={styles.header}>各都道府県の人口推移</h1>
-        <Pref
+        <Region
           selPrefs={selPrefs}
           setPrefs={(prefs) => {
             setPrefs(prefs);

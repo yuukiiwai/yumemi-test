@@ -2,11 +2,12 @@ import { region_pref } from "../constant/data";
 import { handleResErr } from "../constant/funcs";
 import { pref, region } from "../types/data";
 
+/* fetchで返ってくる型に無駄な情報があるので */
 export const getPrefsData = (json: any) => {
-  // fetchで返ってくる型に無駄な情報があるので
   return json.result;
 };
 
+/* 県名をクリックして選択情報を更新する */
 export const updateSelect = (
   flag: boolean, // checkしたor外した
   prefs: pref[], // 現状
@@ -28,6 +29,7 @@ export const updateSelect = (
   }
 };
 
+/* 選択情報を地域選択で更新する */
 export const updateSelectbyRegi = (
   flag: boolean, // checkしたor外した
   prefs: pref[], // 現状
@@ -58,8 +60,8 @@ export const updateSelectbyRegi = (
   }
 };
 
+/* 通信 */
 export const getPrefs = async (url: string, apikey: string) => {
-  /* 通信 */
   const data = await fetch(url, {
     headers: {
       "X-API-KEY": apikey,
@@ -70,6 +72,7 @@ export const getPrefs = async (url: string, apikey: string) => {
   return data;
 };
 
+/* 県名データを地域ごとに振り分ける */
 export const adjustWithRegion = (originPrefs: pref[]) => {
   let japan: region[] = []; // 最終的なデータ
 
@@ -99,6 +102,7 @@ export const adjustWithRegion = (originPrefs: pref[]) => {
   return japan;
 };
 
+/* 地域自体の選択情報変更 */
 export const updateRegion = (
   checked: boolean,
   newkey: number,
@@ -115,4 +119,38 @@ export const updateRegion = (
     });
     setSelRegionKey(nowRegionKeys);
   }
+};
+
+/* 県名クリックから新しい地域選択をリターンする */
+export const getRegionStatebyPref = (
+  checked: boolean,
+  selPrefs: pref[],
+  selRegionKey: number[],
+  regionkey: number,
+  tagPref: pref,
+  tagRegion: region,
+) => {
+  if (checked === false && selRegionKey.indexOf(regionkey) !== -1) {
+    /* チェックを解除し 
+    地域が選択状態だったら
+    */
+    return [...selRegionKey].filter((item) => {
+      return item !== regionkey;
+    });
+    // その地域を削除したものをリターン
+  } else if (checked === true) {
+    /* チェックを新たにしたら */
+    let newselPref = [...selPrefs, tagPref];
+
+    for (let i = 0; i < tagRegion.prefs.length; i++) {
+      /* 地域内すべてが選択状態になっているか確認 */
+      if (newselPref.indexOf(tagRegion.prefs[i]) === -1) {
+        /* なっていなければその場でリターン */
+        return selRegionKey;
+      }
+    }
+    /* 通過すれば地域を足したものをリターン */
+    return [...selRegionKey, regionkey];
+  }
+  return selRegionKey;
 };
