@@ -91,10 +91,21 @@ export default function Pref(props: props) {
                         pref,
                         props.setPrefs,
                       );
-                      if(checked === false){
+                      if(checked === false && selRegionKey.indexOf(rkey)!==-1){
                         setSelRegionKey([...selRegionKey].filter((item)=>{
                           return item !== rkey;
                         }))
+                      }else if(checked === true){
+                        let exi = true;
+                        for(let i = 0; i < region.prefs.length ;i++){
+                          if([...props.selPrefs,pref].indexOf(region.prefs[i]) === -1){
+                            exi = false;
+                            break;
+                          }
+                        }
+                        if(exi){
+                          setSelRegionKey([...selRegionKey,rkey]);
+                        }
                       }
                     }}
                   />
