@@ -1,11 +1,14 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import { pref } from "../types/data";
+import { pref, region } from "../types/data";
 
 import styles from "../styles/Pref.module.css";
 import {
+  adjustWithRegion,
   getPrefs,
   getPrefsData,
+  updateRegion,
   updateSelect,
+  updateSelectbyRegi,
 } from "../compfuncs/pref";
 
 interface props {
@@ -16,6 +19,8 @@ interface props {
 export default function Pref(props: props) {
   /* 都道府県state */
   const [prefs, setPrefs] = useState<pref[]>([]);
+  const [japan, setJap] = useState<region[]>([]);
+  const [selRegionKey, setSelRegionKey] = useState<number[]>([]); // チェック中の地域をストック
 
   /* 都道府県を取得する */
   useEffect(() => {
@@ -37,38 +42,82 @@ export default function Pref(props: props) {
 
     getPrefs(url, apikey)
       .then((data) => getPrefsData(data))
-      .then((prefsdata) => setPrefs(prefsdata));
+      .then((prefsdata) => {
+        setJap(adjustWithRegion(prefsdata));
+      });
   }, []);
 
   return (
     <section>
       <h2>都道府県</h2>
-      <div className={styles.prefview}>
-        {prefs.map((pref, key) => {
-          return (
-            <div key={key} className={styles.iitem}>
-              <input
-                type={"checkbox"}
-                id={"pref" + pref.prefCode} // idを被らせないように
-                name={pref.prefName}
-                onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                  /* onchangeでselectした都道府県を更新 */
-                  let checked = event.target.checked;
-                  updateSelect(
-                    checked,
-                    props.selPrefs,
-                    pref,
-                    props.setPrefs,
-                  );
-                }}
-              />
-              <label htmlFor={"pref" + pref.prefCode}>
-                {pref.prefName}
-              </label>
-            </div>
-          );
-        })}
-      </div>
+      {japan.map((region, rkey) => {
+        return (
+          <section key={rkey}>
+            <input
+              type="checkbox"
+              id={"region" + region.regionName}
+              checked={selRegionKey.indexOf(rkey) != -1}
+              onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                let checked = event.target.checked;
+                updateSelectbyRegi(
+                  checked,
+                  props.selPrefs,
+                  region.prefs,
+                  props.setPrefs,
+                );
+                updateRegion(checked, rkey, selRegionKey, (keys) => {
+                  setSelRegionKey(keys);
+                });
+              }}
+            />
+            <label htmlFor={"region" + region.regionName}>
+              {region.regionName}
+            </label>
+            {region.prefs.map((pref, pkey) => {
+              return (
+                <div key={pkey}>
+                  <input
+                    type="checkbox"
+                    id={"pref" + pref.prefCode}
+                    name={pref.prefName}
+                    checked={props.selPrefs.indexOf(pref) != -1} // checkがここで管理しきれなくなるから
+                    onChange={(
+                      event: ChangeEvent<HTMLInputElement>,
+                    ) => {
+                      let checked = event.target.checked;
+                      updateSelect(
+                        checked,
+                        props.selPrefs,
+                        pref,
+                        props.setPrefs,
+                      );
+                      if(checked === false && selRegionKey.indexOf(rkey)!==-1){
+                        setSelRegionKey([...selRegionKey].filter((item)=>{
+                          return item !== rkey;
+                        }))
+                      }else if(checked === true){
+                        let exi = true;
+                        for(let i = 0; i < region.prefs.length ;i++){
+                          if([...props.selPrefs,pref].indexOf(region.prefs[i]) === -1){
+                            exi = false;
+                            break;
+                          }
+                        }
+                        if(exi){
+                          setSelRegionKey([...selRegionKey,rkey]);
+                        }
+                      }
+                    }}
+                  />
+                  <label htmlFor={"pref" + pref.prefCode}>
+                    {pref.prefName}
+                  </label>
+                </div>
+              );
+            })}
+          </section>
+        );
+      })}
     </section>
   );
 }
